@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:green_pulse/Classes/found_plant.dart';
 
 class PlantFoundCard extends StatelessWidget {
-  final Map<String, String> plant;
+  final FoundPlant plant;
   PlantFoundCard({super.key, required this.plant});
 
   @override
@@ -21,13 +22,13 @@ class PlantFoundCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${plant['pid']}",
+                  this.plant.pid,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                Text("${plant['display_pid']}",
+                Text(this.plant.display_pid,
                     style:
                         TextStyle(fontSize: 15, fontWeight: FontWeight.w300)),
-                Text("${plant['category']}", style: TextStyle(fontSize: 10))
+                Text(this.plant.alias, style: TextStyle(fontSize: 10))
               ],
             ),
           ),

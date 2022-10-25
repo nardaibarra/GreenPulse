@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:green_pulse/Widgets/plant_found_card.dart';
-import 'package:green_pulse/repositories/plants_api.dart';
+import 'package:green_pulse/bloc/plants_bloc.dart';
+import 'package:green_pulse/screens/plant_details.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -12,33 +14,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final _searchController = TextEditingController();
-  var _found_plants = [
-    {
-      'pid': 'name',
-      'display_pid': 'display_pid',
-      'category': 'category',
-    },
-    {
-      'pid': 'name',
-      'display_pid': 'display_pid',
-      'category': 'category',
-    },
-    {
-      'pid': 'name',
-      'display_pid': 'display_pid',
-      'category': 'category',
-    },
-    {
-      'pid': 'name',
-      'display_pid': 'display_pid',
-      'category': 'category',
-    },
-    {
-      'pid': 'name',
-      'display_pid': 'display_pid',
-      'category': 'category',
-    }
-  ];
+  var _mainMsg = 'Type something to search';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,26 +85,58 @@ class _HomeState extends State<Home> {
                     color: Color.fromARGB(255, 4, 4, 4),
                   ),
                   onPressed: () {
-                    // BlocProvider.of<PlantsBloc>(context).add(
-                    //     SearchBookEvent(inputSearch: _searchController.text));
+                    BlocProvider.of<PlantsBloc>(context).add(
+                        SearchPlantsEvent(inputSearch: _searchController.text));
                   },
                 ),
                 floatingLabelBehavior: FloatingLabelBehavior.never,
               ),
             ),
           ),
-          Container(
-              height: MediaQuery.of(context).size.height - 176,
-              child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  itemCount: _found_plants.length,
-                  itemBuilder: (BuildContext context, index) {
-                    return GestureDetector(
-                      child: PlantFoundCard(plant: _found_plants[index]),
-                    );
-                  }))
+          BlocConsumer<PlantsBloc, PlantsState>(listener: (context, state) {
+            if (state is PlantsInitial) {
+              _mainMsg = 'Type something to search';
+            }
+            if (state is SelectedPlantState) {
+              navigateToSelectedPlantsPage(context, state);
+            }
+            if (state is ErrorPlantsState) {
+              _mainMsg = state.error;
+            }
+          }, builder: (context, state) {
+            if (state is FoundPlantsState) {
+              return _foundPlantListView(context, state);
+            } else
+              return _defaultView(context, this._mainMsg);
+          })
         ],
       ),
     );
   }
+
+  void navigateToSelectedPlantsPage(
+      BuildContext context, SelectedPlantState state) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (nextContext) => BlocProvider.value(
+            value: BlocProvider.of<PlantsBloc>(context), child: PlantDetails()),
+        settings: RouteSettings(arguments: [state.selectedPlant])));
+  }
+}
+
+Widget _foundPlantListView(BuildContext context, state) {
+  return Container(
+      height: MediaQuery.of(context).size.height - 176,
+      child: ListView.builder(
+          scrollDirection: Axis.vertical,
+          itemCount: state.foundPlants.length,
+          itemBuilder: (BuildContext context, index) {
+            return GestureDetector(
+              child: PlantFoundCard(plant: state.foundPlants[index]),
+            );
+          }));
+}
+
+Widget _defaultView(BuildContext context, state) {
+  return Container(
+      height: MediaQuery.of(context).size.height - 176, child: Text('hello'));
 }
