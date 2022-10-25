@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:green_pulse/Widgets/plant_found_card.dart';
 import 'package:green_pulse/repositories/plants_api.dart';
 
 class Home extends StatefulWidget {
@@ -11,10 +12,38 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final _searchController = TextEditingController();
+  var _found_plants = [
+    {
+      'pid': 'name',
+      'display_pid': 'display_pid',
+      'category': 'category',
+    },
+    {
+      'pid': 'name',
+      'display_pid': 'display_pid',
+      'category': 'category',
+    },
+    {
+      'pid': 'name',
+      'display_pid': 'display_pid',
+      'category': 'category',
+    },
+    {
+      'pid': 'name',
+      'display_pid': 'display_pid',
+      'category': 'category',
+    },
+    {
+      'pid': 'name',
+      'display_pid': 'display_pid',
+      'category': 'category',
+    }
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.grey.shade100,
       body: Column(
         children: [
           Align(
@@ -61,8 +90,6 @@ class _HomeState extends State<Home> {
                 labelText: 'Search for a plant name',
                 filled: true,
                 fillColor: Colors.white,
-                // focusColor: Colors.grey.shade600,
-                // labelStyle: TextStyle(color: Colors.grey),
                 focusColor: Colors.transparent,
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30.0),
@@ -88,7 +115,17 @@ class _HomeState extends State<Home> {
                 floatingLabelBehavior: FloatingLabelBehavior.never,
               ),
             ),
-          )
+          ),
+          Container(
+              height: MediaQuery.of(context).size.height - 176,
+              child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: _found_plants.length,
+                  itemBuilder: (BuildContext context, index) {
+                    return GestureDetector(
+                      child: PlantFoundCard(plant: _found_plants[index]),
+                    );
+                  }))
         ],
       ),
     );
