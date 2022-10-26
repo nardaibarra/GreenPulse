@@ -9,6 +9,7 @@ class PlantDetails extends StatefulWidget {
 }
 
 class _PlantDetailsState extends State<PlantDetails> {
+  final _nameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     List<dynamic> params =
@@ -46,7 +47,9 @@ class _PlantDetailsState extends State<PlantDetails> {
                 foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 backgroundColor: Color.fromARGB(255, 29, 119, 32),
               ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
-              onPressed: (() {}),
+              onPressed: (() {
+                _displayTextInputDialog(context, _nameController);
+              }),
               child: const Text('Add plant'),
             ),
           )
@@ -54,4 +57,51 @@ class _PlantDetailsState extends State<PlantDetails> {
       ),
     ));
   }
+}
+
+_displayTextInputDialog(
+    BuildContext context, TextEditingController name) async {
+  return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+            title: Text('Write an alias for your plant'),
+            backgroundColor: Colors.grey.shade100,
+            content: TextField(
+              controller: name,
+              cursorColor: Colors.grey.shade600,
+              style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+              decoration: InputDecoration(
+                labelText: 'My bedroom plant',
+                filled: true,
+                fillColor: Colors.white,
+                focusColor: Colors.transparent,
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    borderSide: BorderSide(color: Colors.transparent)),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.transparent)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide:
+                      const BorderSide(color: Colors.transparent, width: 0),
+                ),
+                floatingLabelBehavior: FloatingLabelBehavior.never,
+              ),
+            ),
+            actions: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: StadiumBorder(),
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  backgroundColor: Color.fromARGB(255, 29, 119, 32),
+                ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+                child: Text('Add'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ]);
+      });
 }
