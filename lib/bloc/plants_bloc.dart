@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:green_pulse/Classes/found_plant.dart';
+import 'package:green_pulse/Classes/plant.dart';
 import 'package:green_pulse/repositories/plants_api.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
@@ -23,7 +24,7 @@ class PlantsBloc extends Bloc<PlantsEvent, PlantsState> {
       Response response = await apiCaller.getPlants(event.inputSearch);
       if (response.statusCode != 404) {
         try {
-          foundPlants = apiCaller.decodeResponse(response);
+          foundPlants = apiCaller.decodePlantsResponse(response);
           if (foundPlants.isEmpty) {
             emit(ErrorPlantsState(
                 'There are no results in your search, please try again..'));
@@ -44,6 +45,12 @@ class PlantsBloc extends Bloc<PlantsEvent, PlantsState> {
     emit(FoundPlantsState(foundPlants));
   }
 
-  FutureOr<void> _seeDetails(
-      SeePlantDetailsEvent event, Emitter<PlantsState> emit) {}
+  Future<FutureOr<void>> _seeDetails(
+      SeePlantDetailsEvent event, Emitter<PlantsState> emit) async {
+    var apiCaller = PlantsAPI();
+    Response response = await apiCaller.getPlantDetails(event.plant.pid);
+    Plant plant = apiCaller.decodeDetailsResponse(response);
+
+    emit(SelectedPlantState(plant));
+  }
 }

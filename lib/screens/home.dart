@@ -136,7 +136,7 @@ Widget _foundPlantListView(BuildContext context, state) {
           }));
 }
 
-Widget _defaultView(BuildContext context, state) {
+Widget _defaultView(BuildContext context, msg) {
   return Container(
-      height: MediaQuery.of(context).size.height - 176, child: Text('hello'));
+      height: MediaQuery.of(context).size.height - 176, child: Text(msg));
 }

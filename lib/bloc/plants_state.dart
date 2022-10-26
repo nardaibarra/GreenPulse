@@ -10,7 +10,7 @@ abstract class PlantsState extends Equatable {
 class PlantsInitial extends PlantsState {}
 
 class SelectedPlantState extends PlantsState {
-  final FoundPlant selectedPlant;
+  final Plant selectedPlant;
   SelectedPlantState(this.selectedPlant);
   @override
   List<Object> get props => [selectedPlant];
