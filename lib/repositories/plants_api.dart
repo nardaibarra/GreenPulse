@@ -18,6 +18,7 @@ class PlantsAPI {
     var header = {'Authorization': 'Bearer $token'};
 
     var url = Uri.https('open.plantbook.io', 'api/v1/plant/search', qParams);
+    print(header);
     Response response = await http.get(url, headers: header);
     print(response.body);
     print(response.statusCode);

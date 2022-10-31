@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:green_pulse/Classes/plant.dart';
 
@@ -48,7 +49,7 @@ class _PlantDetailsState extends State<PlantDetails> {
                 backgroundColor: Color.fromARGB(255, 29, 119, 32),
               ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
               onPressed: (() {
-                _displayTextInputDialog(context, _nameController);
+                _displayTextInputDialog(context, _nameController, plant);
               }),
               child: const Text('Add plant'),
             ),
@@ -59,8 +60,30 @@ class _PlantDetailsState extends State<PlantDetails> {
   }
 }
 
+Future _createPlant(Plant plant, String name) async {
+  final docPlant = FirebaseFirestore.instance.collection('plantas').doc();
+  final json = {
+    'pid': plant.pid,
+    'display_pid': plant.display_pid,
+    'alias': plant.alias,
+    'category': plant.category,
+    'max_light_lux': plant.max_light_lux,
+    'min_light_lux': plant.min_light_lux,
+    'max_temp': plant.max_temp,
+    'min_temp': plant.min_temp,
+    'max_env_humid': plant.max_env_humid,
+    'min_env_humid': plant.min_env_humid,
+    'max_soil_moist': plant.max_soil_moist,
+    'min_soil_moist': plant.min_soil_moist,
+    'image_url': plant.image_url,
+    'name': name,
+    'selected': false
+  };
+  await docPlant.set(json);
+}
+
 _displayTextInputDialog(
-    BuildContext context, TextEditingController name) async {
+    BuildContext context, TextEditingController name, Plant plant) async {
   return showDialog(
       context: context,
       builder: (context) {
@@ -99,6 +122,7 @@ _displayTextInputDialog(
                 ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
                 child: Text('Add'),
                 onPressed: () {
+                  _createPlant(plant, name.text);
                   Navigator.pop(context);
                 },
               ),
