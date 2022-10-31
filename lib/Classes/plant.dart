@@ -1,4 +1,6 @@
 class Plant {
+  String id;
+  String name;
   final String pid;
   final String display_pid;
   final String alias;
@@ -13,7 +15,9 @@ class Plant {
   final int min_soil_moist;
   final String image_url;
   Plant(
-      {required this.pid,
+      {this.id = '',
+      this.name = '',
+      required this.pid,
       required this.display_pid,
       required this.alias,
       required this.category,
@@ -26,4 +30,22 @@ class Plant {
       required this.max_soil_moist,
       required this.min_soil_moist,
       required this.image_url});
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'image_url': image_url,
+        'alias': alias,
+        'pid': pid,
+        'display_pid': display_pid,
+        'category': category,
+        'max_light_lux': max_light_lux,
+        'min_light_lux': min_light_lux,
+        'max_temp': max_temp,
+        'min_temp': min_temp,
+        'max_env_humid': max_env_humid,
+        'min_env_humid': min_env_humid,
+        'max_soil_moist': max_soil_moist,
+        'min_soil_moist': min_soil_moist,
+        'selected': false
+      };
 }

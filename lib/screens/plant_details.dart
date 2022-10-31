@@ -62,23 +62,9 @@ class _PlantDetailsState extends State<PlantDetails> {
 
 Future _createPlant(Plant plant, String name) async {
   final docPlant = FirebaseFirestore.instance.collection('plantas').doc();
-  final json = {
-    'pid': plant.pid,
-    'display_pid': plant.display_pid,
-    'alias': plant.alias,
-    'category': plant.category,
-    'max_light_lux': plant.max_light_lux,
-    'min_light_lux': plant.min_light_lux,
-    'max_temp': plant.max_temp,
-    'min_temp': plant.min_temp,
-    'max_env_humid': plant.max_env_humid,
-    'min_env_humid': plant.min_env_humid,
-    'max_soil_moist': plant.max_soil_moist,
-    'min_soil_moist': plant.min_soil_moist,
-    'image_url': plant.image_url,
-    'name': name,
-    'selected': false
-  };
+  plant.id = docPlant.id;
+  plant.name = name;
+  final json = plant.toJson();
   await docPlant.set(json);
 }
 
