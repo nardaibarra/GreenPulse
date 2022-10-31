@@ -1,6 +1,9 @@
+import 'dart:ffi';
+
 class Plant {
   String id;
   String name;
+  bool selected;
   final String pid;
   final String display_pid;
   final String alias;
@@ -17,6 +20,7 @@ class Plant {
   Plant(
       {this.id = '',
       this.name = '',
+      this.selected = false,
       required this.pid,
       required this.display_pid,
       required this.alias,
@@ -48,4 +52,22 @@ class Plant {
         'min_soil_moist': min_soil_moist,
         'selected': false
       };
+
+  static Plant fromJson(Map<String, dynamic> json) => Plant(
+      id: json['id'],
+      name: json['name'],
+      selected: json['selected'],
+      pid: json['pid'],
+      display_pid: json['display_pid'],
+      alias: json['alias'],
+      category: json['category'],
+      max_light_lux: json['max_light_lux'],
+      min_light_lux: json['min_light_lux'],
+      max_temp: json['max_temp'],
+      min_temp: json['min_temp'],
+      max_env_humid: json['max_env_humid'],
+      min_env_humid: json['min_env_humid'],
+      max_soil_moist: json['max_soil_moist'],
+      min_soil_moist: json['min_soil_moist'],
+      image_url: json['image_url']);
 }

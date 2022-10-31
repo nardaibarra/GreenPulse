@@ -68,6 +68,12 @@ Future _createPlant(Plant plant, String name) async {
   await docPlant.set(json);
 }
 
+Stream<List<Plant>> _getPlants() => FirebaseFirestore.instance
+    .collection('plantas')
+    .snapshots()
+    .map((snapshot) =>
+        snapshot.docs.map((doc) => Plant.fromJson(doc.data())).toList());
+
 _displayTextInputDialog(
     BuildContext context, TextEditingController name, Plant plant) async {
   return showDialog(
@@ -109,6 +115,7 @@ _displayTextInputDialog(
                 child: Text('Add'),
                 onPressed: () {
                   _createPlant(plant, name.text);
+                  print(_getPlants().toString());
                   Navigator.pop(context);
                 },
               ),

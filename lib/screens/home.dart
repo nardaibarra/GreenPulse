@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:green_pulse/Classes/plant.dart';
 import 'package:green_pulse/Widgets/plant_found_card.dart';
 import 'package:green_pulse/bloc/plants_bloc.dart';
 import 'package:green_pulse/screens/plant_details.dart';
@@ -108,7 +110,24 @@ class _HomeState extends State<Home> {
               return _foundPlantListView(context, state);
             } else
               return _defaultView(context, this._mainMsg);
-          })
+          }),
+          // StreamBuilder<List<Plant>>(
+          //     stream: _getPlants(),
+          //     builder: ((context, snapshot) {
+          //       if (snapshot.hasError) {
+          //         print("Entro 1;");
+          //         return Text('Algo salio mal!');
+          //       } else if (snapshot.hasData) {
+          //         print("Entro 2;");
+          //         final plants = snapshot.data!;
+          //         return ListView(children: plants.map(buildPlants).toList());
+          //       } else {
+          //         print("Entro 3;");
+          //         return Center(
+          //           child: CircularProgressIndicator(),
+          //         );
+          //       }
+          //     }))
         ],
       ),
     );
@@ -122,6 +141,19 @@ class _HomeState extends State<Home> {
         settings: RouteSettings(arguments: [state.selectedPlant])));
   }
 }
+
+Stream<List<Plant>> _getPlants() => FirebaseFirestore.instance
+    .collection('plantas')
+    .snapshots()
+    .map((snapshot) =>
+        snapshot.docs.map((doc) => Plant.fromJson(doc.data())).toList());
+
+Widget buildPlants(Plant plant) => ListTile(
+    leading: CircleAvatar(
+      child: Text('${plant.name}'),
+    ),
+    title: Text(plant.display_pid),
+    subtitle: Text('${plant.category}'));
 
 Widget _foundPlantListView(BuildContext context, state) {
   return Container(
