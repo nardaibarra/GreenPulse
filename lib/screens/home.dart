@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:green_pulse/Classes/plant.dart';
-import 'package:green_pulse/Widgets/plant_found_card.dart';
+import 'package:green_pulse/classes/plant.dart';
+import 'package:green_pulse/widgets/plant_found_card.dart';
 import 'package:green_pulse/bloc/plants_bloc.dart';
 import 'package:green_pulse/screens/plant_details.dart';
 

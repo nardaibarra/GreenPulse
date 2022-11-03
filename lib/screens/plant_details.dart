@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:green_pulse/Classes/plant.dart';
+import 'package:green_pulse/classes/plant.dart';
 
 class PlantDetails extends StatefulWidget {
   const PlantDetails({super.key});
