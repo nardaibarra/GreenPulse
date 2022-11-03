@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:green_pulse/bloc/plants_bloc.dart';
-import 'package:green_pulse/Classes/found_plant.dart';
+import 'package:green_pulse/classes/found_plant.dart';
 
 class PlantFoundCard extends StatelessWidget {
   PlantFoundCard({super.key, required this.plant});

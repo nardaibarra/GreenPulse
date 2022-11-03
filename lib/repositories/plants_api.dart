@@ -1,5 +1,5 @@
-import 'package:green_pulse/Classes/found_plant.dart';
-import 'package:green_pulse/Classes/plant.dart';
+import 'package:green_pulse/classes/found_plant.dart';
+import 'package:green_pulse/classes/plant.dart';
 import 'package:green_pulse/secret/plantsAPI_token.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';

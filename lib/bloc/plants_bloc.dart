@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:green_pulse/Classes/found_plant.dart';
-import 'package:green_pulse/Classes/plant.dart';
+import 'package:green_pulse/classes/found_plant.dart';
+import 'package:green_pulse/classes/plant.dart';
 import 'package:green_pulse/repositories/plants_api.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
