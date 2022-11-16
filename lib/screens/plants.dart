@@ -1,12 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:green_pulse/classes/plant.dart';
 import 'package:green_pulse/screens/stats.dart';
-import 'package:green_pulse/widgets/plant_found_card.dart';
-import 'package:green_pulse/bloc/plants_bloc.dart';
-import 'package:green_pulse/screens/plant_details.dart';
 
 class plantsScreen extends StatefulWidget {
   const plantsScreen({super.key});
@@ -15,10 +11,8 @@ class plantsScreen extends StatefulWidget {
   State<plantsScreen> createState() => _plantsScreenState();
 }
 
-Stream<List<Plant>> _getPlants() => FirebaseFirestore.instance
-    .collection('plantas')
-    .snapshots()
-    .map((snapshot) =>
+Stream<List<Plant>> _getPlants() =>
+    FirebaseFirestore.instance.collection('plant').snapshots().map((snapshot) =>
         snapshot.docs.map((doc) => Plant.fromJson(doc.data())).toList());
 
 Widget buildPlants(Plant plant) => ListTile(
@@ -53,6 +47,7 @@ class _plantsScreenState extends State<plantsScreen> {
           stream: _getPlants(),
           builder: ((context, snapshot) {
             if (snapshot.hasError) {
+              print(snapshot);
               return Text('Algo salio mal!');
             } else if (snapshot.hasData) {
               final plants = snapshot.data!;

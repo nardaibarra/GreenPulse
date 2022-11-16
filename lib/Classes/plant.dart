@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class Plant {
   String id;
   String name;
@@ -42,14 +40,6 @@ class Plant {
         'pid': pid,
         'display_pid': display_pid,
         'category': category,
-        'max_light_lux': max_light_lux,
-        'min_light_lux': min_light_lux,
-        'max_temp': max_temp,
-        'min_temp': min_temp,
-        'max_env_humid': max_env_humid,
-        'min_env_humid': min_env_humid,
-        'max_soil_moist': max_soil_moist,
-        'min_soil_moist': min_soil_moist,
         'selected': false
       };
 
@@ -61,13 +51,13 @@ class Plant {
       display_pid: json['display_pid'],
       alias: json['alias'],
       category: json['category'],
-      max_light_lux: json['max_light_lux'],
-      min_light_lux: json['min_light_lux'],
-      max_temp: json['max_temp'],
-      min_temp: json['min_temp'],
-      max_env_humid: json['max_env_humid'],
-      min_env_humid: json['min_env_humid'],
-      max_soil_moist: json['max_soil_moist'],
-      min_soil_moist: json['min_soil_moist'],
+      max_light_lux: 0,
+      min_light_lux: 0,
+      max_temp: 0,
+      min_temp: 0,
+      max_env_humid: 0,
+      min_env_humid: 0,
+      max_soil_moist: 0,
+      min_soil_moist: 0,
       image_url: json['image_url']);
 }

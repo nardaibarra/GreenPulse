@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:green_pulse/Classes/plant_requirements.dart';
 import 'package:green_pulse/classes/plant.dart';
 
 class PlantDetails extends StatefulWidget {
@@ -61,17 +62,98 @@ class _PlantDetailsState extends State<PlantDetails> {
 }
 
 Future _createPlant(Plant plant, String name) async {
-  final docPlant = FirebaseFirestore.instance.collection('plantas').doc();
+  final measureSoilDoc =
+      FirebaseFirestore.instance.collection('measure_type').doc('soil_moist');
+  final measureHumDoc =
+      FirebaseFirestore.instance.collection('measure_type').doc('humidity');
+  final measureTempDoc =
+      FirebaseFirestore.instance.collection('measure_type').doc('temperature');
+  final measureLightDoc =
+      FirebaseFirestore.instance.collection('measure_type').doc('light');
+
+  final docPlant = FirebaseFirestore.instance.collection('plant').doc();
+  final docPlantRequirementMinSoil =
+      FirebaseFirestore.instance.collection('plant_requirements').doc();
+  final docPlantRequirementMaxSoil =
+      FirebaseFirestore.instance.collection('plant_requirements').doc();
+  final docPlantRequirementMinLux =
+      FirebaseFirestore.instance.collection('plant_requirements').doc();
+  final docPlantRequirementMaxLux =
+      FirebaseFirestore.instance.collection('plant_requirements').doc();
+  final docPlantRequirementMinHum =
+      FirebaseFirestore.instance.collection('plant_requirements').doc();
+  final docPlantRequirementMaxHum =
+      FirebaseFirestore.instance.collection('plant_requirements').doc();
+  final docPlantRequirementMinTemp =
+      FirebaseFirestore.instance.collection('plant_requirements').doc();
+  final docPlantRequirementMaxTemp =
+      FirebaseFirestore.instance.collection('plant_requirements').doc();
+
+  PlantRequirements minTemp = PlantRequirements(
+      boundary: "min",
+      measure_type: measureTempDoc,
+      plant: docPlant,
+      value: plant.min_temp);
+  PlantRequirements minLux = PlantRequirements(
+      boundary: "min",
+      measure_type: measureLightDoc,
+      plant: docPlant,
+      value: plant.min_light_lux);
+  PlantRequirements minHum = PlantRequirements(
+      boundary: "min",
+      measure_type: measureHumDoc,
+      plant: docPlant,
+      value: plant.min_env_humid);
+  PlantRequirements minSoil = PlantRequirements(
+      boundary: "min",
+      measure_type: measureSoilDoc,
+      plant: docPlant,
+      value: plant.min_soil_moist);
+  PlantRequirements maxTemp = PlantRequirements(
+      boundary: "max",
+      measure_type: measureTempDoc,
+      plant: docPlant,
+      value: plant.max_temp);
+  PlantRequirements maxLux = PlantRequirements(
+      boundary: "max",
+      measure_type: measureLightDoc,
+      plant: docPlant,
+      value: plant.max_light_lux);
+  PlantRequirements maxHum = PlantRequirements(
+      boundary: "max",
+      measure_type: measureHumDoc,
+      plant: docPlant,
+      value: plant.max_env_humid);
+  PlantRequirements maxSoil = PlantRequirements(
+      boundary: "max",
+      measure_type: measureSoilDoc,
+      plant: docPlant,
+      value: plant.max_soil_moist);
+
   plant.id = docPlant.id;
   plant.name = name;
   final json = plant.toJson();
+  final jsonMaxTemp = maxTemp.toJson();
+  final jsonMaxHum = maxHum.toJson();
+  final jsonMaxSoil = maxSoil.toJson();
+  final jsonMaxLux = maxLux.toJson();
+  final jsonMinTemp = minTemp.toJson();
+  final jsonMinHum = minHum.toJson();
+  final jsonMinSoil = minSoil.toJson();
+  final jsonMinLux = minLux.toJson();
   await docPlant.set(json);
+  await docPlantRequirementMaxHum.set(jsonMaxHum);
+  await docPlantRequirementMaxTemp.set(jsonMaxTemp);
+  await docPlantRequirementMaxSoil.set(jsonMaxSoil);
+  await docPlantRequirementMaxLux.set(jsonMaxLux);
+  await docPlantRequirementMinTemp.set(jsonMinTemp);
+  await docPlantRequirementMinHum.set(jsonMinHum);
+  await docPlantRequirementMinSoil.set(jsonMinSoil);
+  await docPlantRequirementMinLux.set(jsonMinLux);
 }
 
-Stream<List<Plant>> _getPlants() => FirebaseFirestore.instance
-    .collection('plantas')
-    .snapshots()
-    .map((snapshot) =>
+Stream<List<Plant>> _getPlants() =>
+    FirebaseFirestore.instance.collection('plant').snapshots().map((snapshot) =>
         snapshot.docs.map((doc) => Plant.fromJson(doc.data())).toList());
 
 _displayTextInputDialog(

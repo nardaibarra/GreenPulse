@@ -41,6 +41,7 @@ dependencies:
   firebase_core:
   google_sign_in:
   cloud_firestore:
+  intl: ^0.17.0
   
 
 dev_dependencies:
