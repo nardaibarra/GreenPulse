@@ -16,19 +16,27 @@ Stream<List<Plant>> _getPlants() =>
         snapshot.docs.map((doc) => Plant.fromJson(doc.data())).toList());
 
 Widget buildPlants(Plant plant) => ListTile(
-    leading: CircleAvatar(
-      backgroundImage: NetworkImage(plant.image_url),
-      // child: Text('${plant.name}'),
-    ),
-    title: Text(plant.display_pid + " Name: " + plant.name),
-    subtitle: Text('${plant.category}'));
+      leading: CircleAvatar(
+        backgroundImage: NetworkImage(plant.image_url),
+        // child: Text('${plant.name}'),
+      ),
+      title: Text(plant.display_pid),
+      subtitle: Text('${plant.category}'),
+      trailing: plant.selected ? Text("Verdadero") : Text("Falso"),
+    );
 
 class _plantsScreenState extends State<plantsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Favorite Plants"),
+        centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Colors.grey.shade100,
+        title: Text(
+          "Favorite Plants",
+          style: TextStyle(color: Colors.black),
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -37,9 +45,8 @@ class _plantsScreenState extends State<plantsScreen> {
                 MaterialPageRoute(builder: (context) => const statsScreen()),
               );
             },
-            icon: FaIcon(FontAwesomeIcons.pagelines),
-            color: Color.fromARGB(255, 119, 83, 29),
-            iconSize: 50,
+            icon: FaIcon(FontAwesomeIcons.chartLine),
+            color: Color.fromARGB(255, 255, 56, 56),
           ),
         ],
       ),
@@ -48,7 +55,7 @@ class _plantsScreenState extends State<plantsScreen> {
           builder: ((context, snapshot) {
             if (snapshot.hasError) {
               print(snapshot);
-              return Text('Algo salio mal!');
+              return Text('Something went wrong!');
             } else if (snapshot.hasData) {
               final plants = snapshot.data!;
               return ListView(children: plants.map(buildPlants).toList());

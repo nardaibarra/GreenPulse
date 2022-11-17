@@ -34,7 +34,7 @@ class _statsScreenState extends State<statsScreen> {
           builder: ((context, snapshot) {
             if (snapshot.hasError) {
               print(snapshot.toString());
-              return Text('Algo salio mal!');
+              return Text('Something went wrong!');
             } else if (snapshot.hasData) {
               final measures = snapshot.data!;
               return ListView(children: measures.map(buildMeasures).toList());
