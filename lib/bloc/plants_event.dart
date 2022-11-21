@@ -24,3 +24,30 @@ class SeePlantDetailsEvent extends PlantsEvent {
   @override
   List<Object> get props => [plant];
 }
+
+class LoadFavPlantsEvent extends PlantsEvent {
+  final String inputSearch;
+  LoadFavPlantsEvent({
+    this.inputSearch = "",
+  });
+  @override
+  List<Object> get props => [inputSearch];
+}
+
+class DeselectPlantEvent extends PlantsEvent {
+  final String idPlant;
+  DeselectPlantEvent({
+    required this.idPlant,
+  });
+  @override
+  List<Object> get props => [idPlant];
+}
+
+class SelectPlantEvent extends PlantsEvent {
+  final String idPlant;
+  SelectPlantEvent({
+    required this.idPlant,
+  });
+  @override
+  List<Object> get props => [idPlant];
+}

@@ -22,6 +22,6 @@ class PlantRequirements {
       PlantRequirements(
           boundary: json['boundary'],
           plant: json['plant'],
-          measure_type: json['value'],
+          measure_type: json['measure_type'],
           value: json['value']);
 }

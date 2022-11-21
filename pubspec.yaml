@@ -42,6 +42,7 @@ dependencies:
   google_sign_in:
   cloud_firestore:
   intl: ^0.17.0
+  gauges: ^1.0.0
   
 
 dev_dependencies:

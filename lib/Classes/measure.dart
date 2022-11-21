@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-final finalFormat = new DateFormat('dd/MM/yyyy hh:mm:ss');
+final finalFormat = new DateFormat('dd/MM/yyyy');
 
 class Measure {
   final String measure_type;
@@ -23,6 +23,9 @@ class Measure {
   static Measure fromJson(Map<String, dynamic> json) => Measure(
       measure_type: json['measure_type'].toString(),
       plant: json['plant'].toString(),
-      timestamp: finalFormat.format(json['timestamp'].toDate()),
+      timestamp: DateTime.now()
+          .difference(json['timestamp'].toDate())
+          .inHours
+          .toString(),
       value: json['value']);
 }
