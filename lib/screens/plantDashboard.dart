@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:green_pulse/Classes/measure.dart';
 import 'package:green_pulse/Classes/plant_requirements.dart';
 import 'package:green_pulse/bloc/plants_bloc.dart';
 import 'package:green_pulse/classes/plant.dart';
 import 'package:gauges/gauges.dart';
+import 'package:green_pulse/screens/allStats.dart';
 
 class favPlantDashboard extends StatefulWidget {
   const favPlantDashboard({super.key});
@@ -49,6 +51,20 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
     // PlantRequirements luxMax = PlantRequirements(boundary: "", plant: "", measure_type: "", value: 0)
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (nextContext) => BlocProvider.value(
+                      value: BlocProvider.of<PlantsBloc>(context),
+                      child: statsScreen()),
+                  settings: RouteSettings(arguments: [plant])));
+            },
+            icon: FaIcon(FontAwesomeIcons.chartLine),
+            color: Color.fromARGB(255, 255, 56, 56),
+          ),
+        ],
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.grey.shade100,
         title: Text(plant.name, style: TextStyle(color: Colors.black)),
@@ -121,9 +137,9 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
           print(maxGaugeMoistValue);
           print(minSegmentMoistYellowValue);
           print(minSegmentMoistRedValue);
-          print(pointerValueHum);
-          print(pointerValueTemp);
-          print(pointerValueSoil);
+          print(pointerValueHum.toString() + " humx");
+          print(pointerValueTemp.toString() + " temp");
+          print(pointerValueSoil.toString() + " soil");
           print(pointerValueLux.toString() + " lix");
         }
         if (state is DeselectedPlantsState) {

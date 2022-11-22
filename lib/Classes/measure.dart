@@ -25,7 +25,7 @@ class Measure {
       plant: json['plant'].toString(),
       timestamp: DateTime.now()
           .difference(json['timestamp'].toDate())
-          .inHours
+          .inMinutes
           .toString(),
       value: json['value']);
 }
