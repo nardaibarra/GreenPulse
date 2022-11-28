@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -21,12 +22,23 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
     List<dynamic> params =
         ModalRoute.of(context)?.settings.arguments as List<dynamic>;
     Plant plant = params[0];
-    Measure temp =
-        Measure(measure_type: "", plant: "", timestamp: "", value: 1);
-    Measure soil =
-        Measure(measure_type: "", plant: "", timestamp: "", value: 0);
-    Measure hum = Measure(measure_type: "", plant: "", timestamp: "", value: 0);
-    Measure lux = Measure(measure_type: "", plant: "", timestamp: "", value: 0);
+    final measureSoilDoc =
+        FirebaseFirestore.instance.collection('measure_type').doc('soil_moist');
+    final measureHumDoc =
+        FirebaseFirestore.instance.collection('measure_type').doc('humidity');
+    final measureTempDoc = FirebaseFirestore.instance
+        .collection('measure_type')
+        .doc('temperature');
+    final measureLightDoc =
+        FirebaseFirestore.instance.collection('measure_type').doc('light');
+    Measure temp = Measure(
+        measure_type: measureTempDoc, plant: "", timestamp: "", value: 1);
+    Measure soil = Measure(
+        measure_type: measureSoilDoc, plant: "", timestamp: "", value: 0);
+    Measure hum = Measure(
+        measure_type: measureHumDoc, plant: "", timestamp: "", value: 0);
+    Measure lux = Measure(
+        measure_type: measureLightDoc, plant: "", timestamp: "", value: 0);
     double minGaugeTempValue = 0;
     double maxGaugeTempValue = 100;
     double minSegmentTempYellowValue = maxGaugeTempValue / 3;
@@ -62,7 +74,7 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
                   settings: RouteSettings(arguments: [plant])));
             },
             icon: FaIcon(FontAwesomeIcons.chartLine),
-            color: Color.fromARGB(255, 255, 56, 56),
+            color: Colors.black,
           ),
         ],
         iconTheme: IconThemeData(color: Colors.black),
@@ -120,27 +132,6 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
           pointerValueTemp = state.temp.value.toDouble();
           pointerValueSoil = state.soil.value.toDouble();
           pointerValueLux = state.lux.value.toDouble();
-          print(minGaugeTempValue);
-          print(maxGaugeTempValue);
-          print(minSegmentTempYellowValue);
-          print(minSegmentTempRedValue);
-          print(minGaugeHumValue);
-          print(maxGaugeHumValue);
-          print(minSegmentHumYellowValue);
-          print(minSegmentHumRedValue);
-          print(minGaugeLuxValue);
-          print(maxGaugeLuxValue);
-          print(minSegmentLuxYellowValue);
-
-          print(minSegmentLuxRedValue);
-          print(minGaugeMoistValue);
-          print(maxGaugeMoistValue);
-          print(minSegmentMoistYellowValue);
-          print(minSegmentMoistRedValue);
-          print(pointerValueHum.toString() + " humx");
-          print(pointerValueTemp.toString() + " temp");
-          print(pointerValueSoil.toString() + " soil");
-          print(pointerValueLux.toString() + " lix");
         }
         if (state is DeselectedPlantsState) {
           plant = state.plant;
@@ -167,25 +158,25 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
                 Text(
                   plant.name,
                   style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width / 12.33,
+                      fontSize: MediaQuery.of(context).size.width / 15.33,
                       fontWeight: FontWeight.bold),
                 ),
                 Text(
                   plant.display_pid,
                   style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width / 21.33,
+                      fontSize: MediaQuery.of(context).size.width / 24.33,
                       fontWeight: FontWeight.bold),
                 ),
                 Text(
                   plant.alias,
                   style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width / 22.33,
+                      fontSize: MediaQuery.of(context).size.width / 25.33,
                       fontWeight: FontWeight.w300),
                 ),
                 Text(
                   "Category: " + plant.display_pid,
                   style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width / 21.33,
+                      fontSize: MediaQuery.of(context).size.width / 24.33,
                       fontWeight: FontWeight.w500),
                 ),
                 Row(
@@ -199,7 +190,7 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
                     Text(
                       plant.selected ? "Connected" : "Disconnected",
                       style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width / 21.33,
+                          fontSize: MediaQuery.of(context).size.width / 24.33,
                           fontWeight: FontWeight.w500),
                     )
                   ],
@@ -211,12 +202,12 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SizedBox(
-                      width: MediaQuery.of(context).size.width / 21.33,
+                      width: MediaQuery.of(context).size.width / 24.33,
                     ),
                     Text(
                       "Metrics",
                       style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width / 11.33,
+                          fontSize: MediaQuery.of(context).size.width / 14.33,
                           fontWeight: FontWeight.w500),
                     )
                   ],
@@ -228,7 +219,7 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
                       Text(
                         "Temperature",
                         style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width / 18.33,
+                            fontSize: MediaQuery.of(context).size.width / 21.33,
                             fontWeight: FontWeight.w500),
                       ),
                       Text(
@@ -236,7 +227,7 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
                             ? ""
                             : "Last read: " + temp.timestamp + " mins ago",
                         style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width / 22.33,
+                            fontSize: MediaQuery.of(context).size.width / 25.33,
                             fontWeight: FontWeight.w300),
                       )
                     ]),
@@ -244,7 +235,7 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
                       Text(
                         "Air Humidity",
                         style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width / 18.33,
+                            fontSize: MediaQuery.of(context).size.width / 21.33,
                             fontWeight: FontWeight.w500),
                       ),
                       Text(
@@ -252,7 +243,7 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
                             ? ""
                             : "Last read: " + hum.timestamp + " mins ago",
                         style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width / 22.33,
+                            fontSize: MediaQuery.of(context).size.width / 25.33,
                             fontWeight: FontWeight.w300),
                       )
                     ]),
@@ -263,107 +254,116 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
                   children: [
                     Column(
                       children: [
-                        RadialGauge(
-                          radius: MediaQuery.of(context).size.width / 9.33,
-                          axes: [
-                            RadialGaugeAxis(
-                              color: Colors.transparent,
-                              minValue: minGaugeTempValue,
-                              maxValue: maxGaugeTempValue,
-                              minAngle: -90, maxAngle: 90,
-                              // ...
-                              segments: [
-                                RadialGaugeSegment(
-                                  minValue: minGaugeTempValue,
-                                  maxValue: minSegmentTempYellowValue,
-                                  minAngle: -90,
-                                  maxAngle: -30,
-                                  color: Colors.green,
-                                ),
-                                RadialGaugeSegment(
-                                  minValue: minSegmentTempYellowValue,
-                                  maxValue: minSegmentTempRedValue,
-                                  minAngle: -30,
-                                  maxAngle: 30,
-                                  color: Colors.yellow,
-                                ),
-                                RadialGaugeSegment(
-                                  minValue: minSegmentTempRedValue,
-                                  maxValue: maxGaugeTempValue,
-                                  minAngle: 30,
-                                  maxAngle: 90,
-                                  color: Colors.red,
-                                ),
+                        Stack(alignment: Alignment.bottomCenter, children: [
+                          RadialGauge(
+                            radius: MediaQuery.of(context).size.width / 9.33,
+                            axes: [
+                              RadialGaugeAxis(
+                                color: Colors.transparent,
+                                minValue: minGaugeTempValue,
+                                maxValue: maxGaugeTempValue,
+                                minAngle: -90, maxAngle: 90,
                                 // ...
-                              ],
-                              pointers: [
-                                RadialNeedlePointer(
-                                  minValue: minGaugeTempValue,
-                                  maxValue: maxGaugeTempValue,
-                                  value: pointerValueTemp,
-                                  thicknessStart: 10,
-                                  thicknessEnd: 0,
-                                  length: 0.6,
-                                  knobRadiusAbsolute: 3,
-                                )
-                              ],
-                            ),
-                          ],
-                        )
+                                segments: [
+                                  RadialGaugeSegment(
+                                    minValue: minGaugeTempValue,
+                                    maxValue: minSegmentTempYellowValue,
+                                    minAngle: -90,
+                                    maxAngle: -30,
+                                    color: Colors.green,
+                                  ),
+                                  RadialGaugeSegment(
+                                    minValue: minSegmentTempYellowValue,
+                                    maxValue: minSegmentTempRedValue,
+                                    minAngle: -30,
+                                    maxAngle: 30,
+                                    color: Colors.yellow,
+                                  ),
+                                  RadialGaugeSegment(
+                                    minValue: minSegmentTempRedValue,
+                                    maxValue: maxGaugeTempValue,
+                                    minAngle: 30,
+                                    maxAngle: 90,
+                                    color: Colors.red,
+                                  ),
+                                  // ...
+                                ],
+                                pointers: [
+                                  RadialNeedlePointer(
+                                    minValue: minGaugeTempValue,
+                                    maxValue: maxGaugeTempValue,
+                                    value: pointerValueTemp,
+                                    thicknessStart: 10,
+                                    thicknessEnd: 0,
+                                    length: 0.6,
+                                    knobRadiusAbsolute: 3,
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                          Text(pointerValueTemp.toString())
+                        ])
                       ],
                     ),
                     Column(
                       children: [
-                        RadialGauge(
-                          radius: MediaQuery.of(context).size.width / 9.33,
-                          axes: [
-                            RadialGaugeAxis(
-                              color: Colors.transparent,
-                              minValue: minGaugeHumValue,
-                              maxValue: maxGaugeHumValue, minAngle: -90,
-                              maxAngle: 90,
-                              // ...
-                              segments: [
-                                RadialGaugeSegment(
-                                  minValue: minGaugeHumValue,
-                                  maxValue: minSegmentHumYellowValue,
-                                  minAngle: -90,
-                                  maxAngle: -30,
-                                  color: Colors.green,
-                                ),
-                                RadialGaugeSegment(
-                                  minValue: minSegmentHumYellowValue,
-                                  maxValue: minSegmentHumRedValue,
-                                  minAngle: -30,
-                                  maxAngle: 30,
-                                  color: Colors.yellow,
-                                ),
-                                RadialGaugeSegment(
-                                  minValue: minSegmentHumRedValue,
-                                  maxValue: maxGaugeHumValue,
-                                  minAngle: 30,
-                                  maxAngle: 90,
-                                  color: Colors.red,
-                                ),
+                        Stack(alignment: Alignment.bottomCenter, children: [
+                          RadialGauge(
+                            radius: MediaQuery.of(context).size.width / 9.33,
+                            axes: [
+                              RadialGaugeAxis(
+                                color: Colors.transparent,
+                                minValue: minGaugeHumValue,
+                                maxValue: maxGaugeHumValue, minAngle: -90,
+                                maxAngle: 90,
                                 // ...
-                              ],
-                              pointers: [
-                                RadialNeedlePointer(
-                                  minValue: minGaugeHumValue,
-                                  maxValue: maxGaugeHumValue,
-                                  value: pointerValueHum,
-                                  thicknessStart: 10,
-                                  thicknessEnd: 0,
-                                  length: 0.6,
-                                  knobRadiusAbsolute: 3,
-                                )
-                              ],
-                            ),
-                          ],
-                        )
+                                segments: [
+                                  RadialGaugeSegment(
+                                    minValue: minGaugeHumValue,
+                                    maxValue: minSegmentHumYellowValue,
+                                    minAngle: -90,
+                                    maxAngle: -30,
+                                    color: Colors.green,
+                                  ),
+                                  RadialGaugeSegment(
+                                    minValue: minSegmentHumYellowValue,
+                                    maxValue: minSegmentHumRedValue,
+                                    minAngle: -30,
+                                    maxAngle: 30,
+                                    color: Colors.yellow,
+                                  ),
+                                  RadialGaugeSegment(
+                                    minValue: minSegmentHumRedValue,
+                                    maxValue: maxGaugeHumValue,
+                                    minAngle: 30,
+                                    maxAngle: 90,
+                                    color: Colors.red,
+                                  ),
+                                  // ...
+                                ],
+                                pointers: [
+                                  RadialNeedlePointer(
+                                    minValue: minGaugeHumValue,
+                                    maxValue: maxGaugeHumValue,
+                                    value: pointerValueHum,
+                                    thicknessStart: 10,
+                                    thicknessEnd: 0,
+                                    length: 0.6,
+                                    knobRadiusAbsolute: 3,
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                          Text(pointerValueHum.toString())
+                        ])
                       ],
                     )
                   ],
+                ),
+                SizedBox(
+                  height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -372,7 +372,7 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
                       Text(
                         "Soil Moisture",
                         style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width / 18.33,
+                            fontSize: MediaQuery.of(context).size.width / 21.33,
                             fontWeight: FontWeight.w500),
                       ),
                       Text(
@@ -380,7 +380,7 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
                             ? ""
                             : "Last read: " + soil.timestamp + " mins ago",
                         style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width / 22.33,
+                            fontSize: MediaQuery.of(context).size.width / 25.33,
                             fontWeight: FontWeight.w300),
                       )
                     ]),
@@ -388,7 +388,7 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
                       Text(
                         "Light",
                         style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width / 18.33,
+                            fontSize: MediaQuery.of(context).size.width / 21.33,
                             fontWeight: FontWeight.w500),
                       ),
                       Text(
@@ -396,7 +396,7 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
                             ? ""
                             : "Last read: " + lux.timestamp + " mins ago",
                         style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width / 22.33,
+                            fontSize: MediaQuery.of(context).size.width / 25.33,
                             fontWeight: FontWeight.w300),
                       )
                     ]),
@@ -407,104 +407,110 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
                   children: [
                     Column(
                       children: [
-                        RadialGauge(
-                          radius: MediaQuery.of(context).size.width / 9.33,
-                          axes: [
-                            RadialGaugeAxis(
-                              color: Colors.transparent,
-                              minValue: minGaugeMoistValue,
-                              maxValue: maxGaugeMoistValue, minAngle: -90,
-                              maxAngle: 90,
-                              // ...
-                              segments: [
-                                RadialGaugeSegment(
-                                  minValue: minGaugeMoistValue,
-                                  maxValue: minSegmentMoistYellowValue,
-                                  minAngle: -90,
-                                  maxAngle: -30,
-                                  color: Colors.green,
-                                ),
-                                RadialGaugeSegment(
-                                  minValue: minSegmentMoistYellowValue,
-                                  maxValue: minSegmentMoistRedValue,
-                                  minAngle: -30,
-                                  maxAngle: 30,
-                                  color: Colors.yellow,
-                                ),
-                                RadialGaugeSegment(
-                                  minValue: minSegmentMoistRedValue,
-                                  maxValue: maxGaugeMoistValue,
-                                  minAngle: 30,
-                                  maxAngle: 90,
-                                  color: Colors.red,
-                                ),
+                        Stack(alignment: Alignment.bottomCenter, children: [
+                          RadialGauge(
+                            radius: MediaQuery.of(context).size.width / 9.33,
+                            axes: [
+                              RadialGaugeAxis(
+                                color: Colors.transparent,
+                                minValue: minGaugeMoistValue,
+                                maxValue: maxGaugeMoistValue, minAngle: -90,
+                                maxAngle: 90,
                                 // ...
-                              ],
-                              pointers: [
-                                RadialNeedlePointer(
-                                  minValue: minGaugeMoistValue,
-                                  maxValue: maxGaugeMoistValue,
-                                  value: pointerValueSoil,
-                                  thicknessStart: 10,
-                                  thicknessEnd: 0,
-                                  length: 0.6,
-                                  knobRadiusAbsolute: 3,
-                                )
-                              ],
-                            ),
-                          ],
-                        )
+                                segments: [
+                                  RadialGaugeSegment(
+                                    minValue: minGaugeMoistValue,
+                                    maxValue: minSegmentMoistYellowValue,
+                                    minAngle: -90,
+                                    maxAngle: -30,
+                                    color: Colors.green,
+                                  ),
+                                  RadialGaugeSegment(
+                                    minValue: minSegmentMoistYellowValue,
+                                    maxValue: minSegmentMoistRedValue,
+                                    minAngle: -30,
+                                    maxAngle: 30,
+                                    color: Colors.yellow,
+                                  ),
+                                  RadialGaugeSegment(
+                                    minValue: minSegmentMoistRedValue,
+                                    maxValue: maxGaugeMoistValue,
+                                    minAngle: 30,
+                                    maxAngle: 90,
+                                    color: Colors.red,
+                                  ),
+                                  // ...
+                                ],
+                                pointers: [
+                                  RadialNeedlePointer(
+                                    minValue: minGaugeMoistValue,
+                                    maxValue: maxGaugeMoistValue,
+                                    value: pointerValueSoil,
+                                    thicknessStart: 10,
+                                    thicknessEnd: 0,
+                                    length: 0.6,
+                                    knobRadiusAbsolute: 3,
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                          Text(pointerValueSoil.toString())
+                        ])
                       ],
                     ),
                     Column(
                       children: [
-                        RadialGauge(
-                          radius: MediaQuery.of(context).size.width / 9.33,
-                          axes: [
-                            RadialGaugeAxis(
-                              color: Colors.transparent,
-                              minValue: minGaugeLuxValue,
-                              maxValue: maxGaugeLuxValue, minAngle: -90,
-                              maxAngle: 90,
-                              // ...
-                              segments: [
-                                RadialGaugeSegment(
-                                  minValue: minGaugeLuxValue,
-                                  maxValue: minSegmentLuxYellowValue,
-                                  minAngle: -90,
-                                  maxAngle: -30,
-                                  color: Colors.green,
-                                ),
-                                RadialGaugeSegment(
-                                  minValue: minSegmentLuxYellowValue,
-                                  maxValue: minSegmentLuxRedValue,
-                                  minAngle: -30,
-                                  maxAngle: 30,
-                                  color: Colors.yellow,
-                                ),
-                                RadialGaugeSegment(
-                                  minValue: minSegmentLuxRedValue,
-                                  maxValue: maxGaugeLuxValue,
-                                  minAngle: 30,
-                                  maxAngle: 90,
-                                  color: Colors.red,
-                                ),
+                        Stack(alignment: Alignment.bottomCenter, children: [
+                          RadialGauge(
+                            radius: MediaQuery.of(context).size.width / 9.33,
+                            axes: [
+                              RadialGaugeAxis(
+                                color: Colors.transparent,
+                                minValue: minGaugeLuxValue,
+                                maxValue: maxGaugeLuxValue, minAngle: -90,
+                                maxAngle: 90,
                                 // ...
-                              ],
-                              pointers: [
-                                RadialNeedlePointer(
-                                  minValue: minGaugeLuxValue,
-                                  maxValue: maxGaugeLuxValue,
-                                  value: pointerValueLux,
-                                  thicknessStart: 10,
-                                  thicknessEnd: 0,
-                                  length: 0.6,
-                                  knobRadiusAbsolute: 3,
-                                )
-                              ],
-                            ),
-                          ],
-                        )
+                                segments: [
+                                  RadialGaugeSegment(
+                                    minValue: minGaugeLuxValue,
+                                    maxValue: minSegmentLuxYellowValue,
+                                    minAngle: -90,
+                                    maxAngle: -30,
+                                    color: Colors.green,
+                                  ),
+                                  RadialGaugeSegment(
+                                    minValue: minSegmentLuxYellowValue,
+                                    maxValue: minSegmentLuxRedValue,
+                                    minAngle: -30,
+                                    maxAngle: 30,
+                                    color: Colors.yellow,
+                                  ),
+                                  RadialGaugeSegment(
+                                    minValue: minSegmentLuxRedValue,
+                                    maxValue: maxGaugeLuxValue,
+                                    minAngle: 30,
+                                    maxAngle: 90,
+                                    color: Colors.red,
+                                  ),
+                                  // ...
+                                ],
+                                pointers: [
+                                  RadialNeedlePointer(
+                                    minValue: minGaugeLuxValue,
+                                    maxValue: maxGaugeLuxValue,
+                                    value: pointerValueLux,
+                                    thicknessStart: 10,
+                                    thicknessEnd: 0,
+                                    length: 0.6,
+                                    knobRadiusAbsolute: 3,
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                          Text(pointerValueLux.toString())
+                        ])
                       ],
                     )
                   ],

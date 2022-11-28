@@ -90,18 +90,6 @@ class _plantsScreenState extends State<plantsScreen> {
           "My Plants",
           style: TextStyle(color: Colors.black),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const statsScreen()),
-              );
-            },
-            icon: FaIcon(FontAwesomeIcons.chartLine),
-            color: Color.fromARGB(255, 255, 56, 56),
-          ),
-        ],
       ),
       body: BlocConsumer<PlantsBloc, PlantsState>(listener: (context, state) {
         if (state is PlantsInitial) {

@@ -11,21 +11,36 @@ class statsScreen extends StatefulWidget {
 }
 
 Stream<List<Measure>> _getStatsFromPlant() {
-  return FirebaseFirestore.instance.collection('measure').snapshots().map(
-      (snapshot) =>
+  return FirebaseFirestore.instance
+      .collection('measure')
+      .orderBy('timestamp', descending: true)
+      .snapshots()
+      .map((snapshot) =>
           snapshot.docs.map((doc) => Measure.fromJson(doc.data())).toList());
 }
 
 Widget buildMeasures(Measure measure, Plant plant) {
-  print(measure.plant);
-  print(plant.id);
-  if (measure.plant == plant.id) {
-    return Text("");
-  }
+  print(measure.measure_type);
   return ListTile(
-      leading: CircleAvatar(),
+      leading: CircleAvatar(
+        backgroundColor: measure.measure_type.id == "soil_moist"
+            ? Colors.brown
+            : measure.measure_type.id == "light"
+                ? Colors.yellow
+                : measure.measure_type.id == "temperature"
+                    ? Colors.red
+                    : Colors.blue,
+      ),
       title: Text(
-        "Value: " + measure.value.toString(),
+        measure.measure_type.id == "light"
+            ? "Value: " + measure.value.toString() + " Lux"
+            : measure.measure_type.id == "soil_moist"
+                ? "Value: " + measure.value.toString() + "% Mst"
+                : measure.measure_type.id == "humidity"
+                    ? "Value: " + measure.value.toString() + "% Hum"
+                    : measure.measure_type.id == "temperature"
+                        ? "Value: " + measure.value.toString() + "° Celsius"
+                        : "Error",
         style: TextStyle(fontSize: 21.33, fontWeight: FontWeight.bold),
       ),
       subtitle: Text('${measure.timestamp}' + " mins ago"));
@@ -40,7 +55,12 @@ class _statsScreenState extends State<statsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Stats from plant"),
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Colors.grey.shade100,
+        title: Text(
+          "All stats from: " + plant.name,
+          style: TextStyle(color: Colors.black),
+        ),
       ),
       body: StreamBuilder<List<Measure>>(
           stream: _getStatsFromPlant(),

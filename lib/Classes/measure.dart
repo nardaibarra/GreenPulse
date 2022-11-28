@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 final finalFormat = new DateFormat('dd/MM/yyyy');
 
 class Measure {
-  final String measure_type;
+  final DocumentReference<Map<String, dynamic>> measure_type;
   final String plant;
   final String timestamp;
   final int value;
@@ -21,7 +22,7 @@ class Measure {
       };
 
   static Measure fromJson(Map<String, dynamic> json) => Measure(
-      measure_type: json['measure_type'].toString(),
+      measure_type: json['measure_type'],
       plant: json['plant'].toString(),
       timestamp: DateTime.now()
           .difference(json['timestamp'].toDate())
