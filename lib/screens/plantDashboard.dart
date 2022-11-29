@@ -16,6 +16,36 @@ class favPlantDashboard extends StatefulWidget {
   State<favPlantDashboard> createState() => _favPlantDashboardState();
 }
 
+void deletePlant(Plant plant) async {
+  await FirebaseFirestore.instance.collection('plant').doc(plant.id).delete();
+}
+
+SnackBar snackbarCreation(Plant plant, double maxValue, double minValue,
+    double actualValue, String measure, String unit) {
+  final snackbar = SnackBar(
+      duration: Duration(seconds: 6),
+      backgroundColor: Colors.red.shade900,
+      content: Text(
+        "Your plant " +
+            plant.name +
+            " has exceeded the limit on " +
+            measure +
+            ", the limit is: " +
+            minValue.toString() +
+            " - " +
+            maxValue.toString() +
+            " " +
+            unit +
+            ", and the reported value is: " +
+            actualValue.toString() +
+            " " +
+            unit +
+            ". Take care of your plant!",
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ));
+  return snackbar;
+}
+
 class _favPlantDashboardState extends State<favPlantDashboard> {
   @override
   Widget build(BuildContext context) {
@@ -89,7 +119,11 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
                         child: const Text('Cancel'),
                       ),
                       TextButton(
-                        onPressed: () => Navigator.pop(context, 'OK'),
+                        onPressed: () {
+                          deletePlant(plant);
+                          Navigator.pop(context, 'OK');
+                          Navigator.pop(context);
+                        },
                         child: const Text('OK'),
                       ),
                     ],
@@ -114,10 +148,7 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
         title: Text(plant.name, style: TextStyle(color: Colors.black)),
       ),
       body: BlocConsumer<PlantsBloc, PlantsState>(listener: (context, state) {
-        if (state is PlantsInitial) {
-          print("Plants Initial!!");
-          print(state);
-        }
+        if (state is PlantsInitial) {}
         if (state is SelectedbooPlantState) {
           plant = state.plant;
           temp = state.temp;
@@ -164,6 +195,36 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
           pointerValueTemp = state.temp.value.toDouble();
           pointerValueSoil = state.soil.value.toDouble();
           pointerValueLux = state.lux.value.toDouble();
+
+          if (pointerValueHum > maxGaugeHumValue ||
+              pointerValueHum < minGaugeHumValue) {
+            final snackBar = snackbarCreation(plant, maxGaugeHumValue,
+                minGaugeHumValue, pointerValueHum, "Humidity", "%");
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
+          if (pointerValueSoil > maxGaugeMoistValue ||
+              pointerValueSoil < minGaugeMoistValue) {
+            final snackBar = snackbarCreation(plant, maxGaugeMoistValue,
+                minGaugeMoistValue, pointerValueSoil, "Moisture", "%");
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
+          if (pointerValueLux > maxGaugeLuxValue ||
+              pointerValueLux < minGaugeLuxValue) {
+            final snackBar = snackbarCreation(plant, maxGaugeLuxValue,
+                minGaugeLuxValue, pointerValueLux, "Light", "Lux");
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
+          if (pointerValueTemp > maxGaugeTempValue ||
+              pointerValueTemp < minGaugeTempValue) {
+            final snackBar = snackbarCreation(
+                plant,
+                maxGaugeTempValue,
+                minGaugeTempValue,
+                pointerValueTemp,
+                "Temperature",
+                "° Celsius");
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
         }
         if (state is DeselectedPlantsState) {
           plant = state.plant;
@@ -173,6 +234,7 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
           if (plant.selected && temp.value == 1) {
             BlocProvider.of<PlantsBloc>(context)
                 .add(SelectPlantEvent(idPlant: plant.id));
+            return Center(child: CircularProgressIndicator());
           }
           return Center(
             widthFactor: MediaQuery.of(context).size.width,
@@ -232,7 +294,7 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
                       ],
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -563,6 +625,9 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
                           ],
                         )
                       ],
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
