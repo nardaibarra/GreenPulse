@@ -72,7 +72,6 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
     double pointerValueHum = 20;
     double pointerValueSoil = 20;
 
-    // PlantRequirements luxMax = PlantRequirements(boundary: "", plant: "", measure_type: "", value: 0)
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -177,410 +176,431 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
           }
           return Center(
             widthFactor: MediaQuery.of(context).size.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-                CircleAvatar(
-                  radius: MediaQuery.of(context).size.width / 4.33,
-                  backgroundImage: NetworkImage(plant.image_url),
-                ),
-                Text(
-                  plant.name,
-                  style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width / 15.33,
-                      fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  plant.display_pid,
-                  style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width / 24.33,
-                      fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  plant.alias,
-                  style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width / 25.33,
-                      fontWeight: FontWeight.w300),
-                ),
-                Text(
-                  "Category: " + plant.display_pid,
-                  style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width / 24.33,
-                      fontWeight: FontWeight.w500),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+            heightFactor: MediaQuery.of(context).size.height,
+            child: SingleChildScrollView(
+              child: Wrap(children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisSize: MainAxisSize.max,
                   children: [
-                    Icon(
-                      Icons.circle,
-                      color: plant.selected ? Colors.green : Colors.red,
-                      size: 20.0,
+                    SizedBox(
+                      height: 10,
+                    ),
+                    CircleAvatar(
+                      radius: MediaQuery.of(context).size.width / 4.33,
+                      backgroundImage: NetworkImage(plant.image_url),
                     ),
                     Text(
-                      plant.selected ? "Connected" : "Disconnected",
+                      plant.name,
+                      style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.width / 15.33,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      plant.display_pid,
+                      style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.width / 24.33,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      plant.alias,
+                      style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.width / 25.33,
+                          fontWeight: FontWeight.w300),
+                    ),
+                    Text(
+                      "Category: " + plant.display_pid,
                       style: TextStyle(
                           fontSize: MediaQuery.of(context).size.width / 24.33,
                           fontWeight: FontWeight.w500),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 24.33,
                     ),
-                    Text(
-                      "Metrics",
-                      style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width / 14.33,
-                          fontWeight: FontWeight.w500),
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(children: [
-                      Text(
-                        "Temperature",
-                        style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width / 21.33,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      Text(
-                        temp.timestamp == ""
-                            ? ""
-                            : "Last read: " + temp.timestamp + " mins ago",
-                        style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width / 25.33,
-                            fontWeight: FontWeight.w300),
-                      )
-                    ]),
-                    Column(children: [
-                      Text(
-                        "Air Humidity",
-                        style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width / 21.33,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      Text(
-                        hum.timestamp == ""
-                            ? ""
-                            : "Last read: " + hum.timestamp + " mins ago",
-                        style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width / 25.33,
-                            fontWeight: FontWeight.w300),
-                      )
-                    ]),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Stack(alignment: Alignment.bottomCenter, children: [
-                          RadialGauge(
-                            radius: MediaQuery.of(context).size.width / 9.33,
-                            axes: [
-                              RadialGaugeAxis(
-                                color: Colors.transparent,
-                                minValue: minGaugeTempValue,
-                                maxValue: maxGaugeTempValue,
-                                minAngle: -90, maxAngle: 90,
-                                // ...
-                                segments: [
-                                  RadialGaugeSegment(
-                                    minValue: minGaugeTempValue,
-                                    maxValue: minSegmentTempYellowValue,
-                                    minAngle: -90,
-                                    maxAngle: -30,
-                                    color: Colors.green,
-                                  ),
-                                  RadialGaugeSegment(
-                                    minValue: minSegmentTempYellowValue,
-                                    maxValue: minSegmentTempRedValue,
-                                    minAngle: -30,
-                                    maxAngle: 30,
-                                    color: Colors.yellow,
-                                  ),
-                                  RadialGaugeSegment(
-                                    minValue: minSegmentTempRedValue,
-                                    maxValue: maxGaugeTempValue,
-                                    minAngle: 30,
-                                    maxAngle: 90,
-                                    color: Colors.red,
-                                  ),
-                                  // ...
-                                ],
-                                pointers: [
-                                  RadialNeedlePointer(
-                                    minValue: minGaugeTempValue,
-                                    maxValue: maxGaugeTempValue,
-                                    value: pointerValueTemp,
-                                    thicknessStart: 10,
-                                    thicknessEnd: 0,
-                                    length: 0.6,
-                                    knobRadiusAbsolute: 3,
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                          Text(pointerValueTemp.toString())
-                        ])
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Stack(alignment: Alignment.bottomCenter, children: [
-                          RadialGauge(
-                            radius: MediaQuery.of(context).size.width / 9.33,
-                            axes: [
-                              RadialGaugeAxis(
-                                color: Colors.transparent,
-                                minValue: minGaugeHumValue,
-                                maxValue: maxGaugeHumValue, minAngle: -90,
-                                maxAngle: 90,
-                                // ...
-                                segments: [
-                                  RadialGaugeSegment(
-                                    minValue: minGaugeHumValue,
-                                    maxValue: minSegmentHumYellowValue,
-                                    minAngle: -90,
-                                    maxAngle: -30,
-                                    color: Colors.green,
-                                  ),
-                                  RadialGaugeSegment(
-                                    minValue: minSegmentHumYellowValue,
-                                    maxValue: minSegmentHumRedValue,
-                                    minAngle: -30,
-                                    maxAngle: 30,
-                                    color: Colors.yellow,
-                                  ),
-                                  RadialGaugeSegment(
-                                    minValue: minSegmentHumRedValue,
-                                    maxValue: maxGaugeHumValue,
-                                    minAngle: 30,
-                                    maxAngle: 90,
-                                    color: Colors.red,
-                                  ),
-                                  // ...
-                                ],
-                                pointers: [
-                                  RadialNeedlePointer(
-                                    minValue: minGaugeHumValue,
-                                    maxValue: maxGaugeHumValue,
-                                    value: pointerValueHum,
-                                    thicknessStart: 10,
-                                    thicknessEnd: 0,
-                                    length: 0.6,
-                                    knobRadiusAbsolute: 3,
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                          Text(pointerValueHum.toString())
-                        ])
-                      ],
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(children: [
-                      Text(
-                        "Soil Moisture",
-                        style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width / 21.33,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      Text(
-                        soil.timestamp == ""
-                            ? ""
-                            : "Last read: " + soil.timestamp + " mins ago",
-                        style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width / 25.33,
-                            fontWeight: FontWeight.w300),
-                      )
-                    ]),
-                    Column(children: [
-                      Text(
-                        "Light",
-                        style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width / 21.33,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      Text(
-                        lux.timestamp == ""
-                            ? ""
-                            : "Last read: " + lux.timestamp + " mins ago",
-                        style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width / 25.33,
-                            fontWeight: FontWeight.w300),
-                      )
-                    ]),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(
-                      children: [
-                        Stack(alignment: Alignment.bottomCenter, children: [
-                          RadialGauge(
-                            radius: MediaQuery.of(context).size.width / 9.33,
-                            axes: [
-                              RadialGaugeAxis(
-                                color: Colors.transparent,
-                                minValue: minGaugeMoistValue,
-                                maxValue: maxGaugeMoistValue, minAngle: -90,
-                                maxAngle: 90,
-                                // ...
-                                segments: [
-                                  RadialGaugeSegment(
-                                    minValue: minGaugeMoistValue,
-                                    maxValue: minSegmentMoistYellowValue,
-                                    minAngle: -90,
-                                    maxAngle: -30,
-                                    color: Colors.green,
-                                  ),
-                                  RadialGaugeSegment(
-                                    minValue: minSegmentMoistYellowValue,
-                                    maxValue: minSegmentMoistRedValue,
-                                    minAngle: -30,
-                                    maxAngle: 30,
-                                    color: Colors.yellow,
-                                  ),
-                                  RadialGaugeSegment(
-                                    minValue: minSegmentMoistRedValue,
-                                    maxValue: maxGaugeMoistValue,
-                                    minAngle: 30,
-                                    maxAngle: 90,
-                                    color: Colors.red,
-                                  ),
-                                  // ...
-                                ],
-                                pointers: [
-                                  RadialNeedlePointer(
-                                    minValue: minGaugeMoistValue,
-                                    maxValue: maxGaugeMoistValue,
-                                    value: pointerValueSoil,
-                                    thicknessStart: 10,
-                                    thicknessEnd: 0,
-                                    length: 0.6,
-                                    knobRadiusAbsolute: 3,
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                          Text(pointerValueSoil.toString())
-                        ])
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Stack(alignment: Alignment.bottomCenter, children: [
-                          RadialGauge(
-                            radius: MediaQuery.of(context).size.width / 9.33,
-                            axes: [
-                              RadialGaugeAxis(
-                                color: Colors.transparent,
-                                minValue: minGaugeLuxValue,
-                                maxValue: maxGaugeLuxValue, minAngle: -90,
-                                maxAngle: 90,
-                                // ...
-                                segments: [
-                                  RadialGaugeSegment(
-                                    minValue: minGaugeLuxValue,
-                                    maxValue: minSegmentLuxYellowValue,
-                                    minAngle: -90,
-                                    maxAngle: -30,
-                                    color: Colors.green,
-                                  ),
-                                  RadialGaugeSegment(
-                                    minValue: minSegmentLuxYellowValue,
-                                    maxValue: minSegmentLuxRedValue,
-                                    minAngle: -30,
-                                    maxAngle: 30,
-                                    color: Colors.yellow,
-                                  ),
-                                  RadialGaugeSegment(
-                                    minValue: minSegmentLuxRedValue,
-                                    maxValue: maxGaugeLuxValue,
-                                    minAngle: 30,
-                                    maxAngle: 90,
-                                    color: Colors.red,
-                                  ),
-                                  // ...
-                                ],
-                                pointers: [
-                                  RadialNeedlePointer(
-                                    minValue: minGaugeLuxValue,
-                                    maxValue: maxGaugeLuxValue,
-                                    value: pointerValueLux,
-                                    thicknessStart: 10,
-                                    thicknessEnd: 0,
-                                    length: 0.6,
-                                    knobRadiusAbsolute: 3,
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                          Text(pointerValueLux.toString())
-                        ])
-                      ],
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton(
-                        onPressed: () {
-                          if (plant.selected) {
-                            BlocProvider.of<PlantsBloc>(context)
-                                .add(DeselectPlantEvent(idPlant: plant.id));
-                          } else {
-                            BlocProvider.of<PlantsBloc>(context)
-                                .add(SelectPlantEvent(idPlant: plant.id));
-                          }
-                        },
-                        style: ButtonStyle(
-                            fixedSize: MaterialStatePropertyAll<Size>(
-                                Size.fromWidth(320)),
-                            backgroundColor: plant.selected
-                                ? MaterialStatePropertyAll<Color>(Colors.green)
-                                : MaterialStatePropertyAll<Color>(Colors.red)),
-                        child: Text(
-                          plant.selected ? "Disconnect" : "Connect",
+                        Icon(
+                          Icons.circle,
+                          color: plant.selected ? Colors.green : Colors.red,
+                          size: 20.0,
+                        ),
+                        Text(
+                          plant.selected ? "Connected" : "Disconnected",
                           style: TextStyle(
-                              color: Colors.white,
                               fontSize:
-                                  MediaQuery.of(context).size.width / 18.33,
+                                  MediaQuery.of(context).size.width / 24.33,
                               fontWeight: FontWeight.w500),
-                        ))
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 24.33,
+                        ),
+                        Text(
+                          "Metrics",
+                          style: TextStyle(
+                              fontSize:
+                                  MediaQuery.of(context).size.width / 14.33,
+                              fontWeight: FontWeight.w500),
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(children: [
+                          Text(
+                            "Temperature",
+                            style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width / 21.33,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          Text(
+                            temp.timestamp == ""
+                                ? ""
+                                : "Last read: " + temp.timestamp + " mins ago",
+                            style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width / 25.33,
+                                fontWeight: FontWeight.w300),
+                          )
+                        ]),
+                        Column(children: [
+                          Text(
+                            "Air Humidity",
+                            style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width / 21.33,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          Text(
+                            hum.timestamp == ""
+                                ? ""
+                                : "Last read: " + hum.timestamp + " mins ago",
+                            style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width / 25.33,
+                                fontWeight: FontWeight.w300),
+                          )
+                        ]),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          children: [
+                            Stack(alignment: Alignment.bottomCenter, children: [
+                              RadialGauge(
+                                radius:
+                                    MediaQuery.of(context).size.width / 9.33,
+                                axes: [
+                                  RadialGaugeAxis(
+                                    color: Colors.transparent,
+                                    minValue: minGaugeTempValue,
+                                    maxValue: maxGaugeTempValue,
+                                    minAngle: -90, maxAngle: 90,
+                                    // ...
+                                    segments: [
+                                      RadialGaugeSegment(
+                                        minValue: minGaugeTempValue,
+                                        maxValue: minSegmentTempYellowValue,
+                                        minAngle: -90,
+                                        maxAngle: -30,
+                                        color: Colors.green,
+                                      ),
+                                      RadialGaugeSegment(
+                                        minValue: minSegmentTempYellowValue,
+                                        maxValue: minSegmentTempRedValue,
+                                        minAngle: -30,
+                                        maxAngle: 30,
+                                        color: Colors.yellow,
+                                      ),
+                                      RadialGaugeSegment(
+                                        minValue: minSegmentTempRedValue,
+                                        maxValue: maxGaugeTempValue,
+                                        minAngle: 30,
+                                        maxAngle: 90,
+                                        color: Colors.red,
+                                      ),
+                                      // ...
+                                    ],
+                                    pointers: [
+                                      RadialNeedlePointer(
+                                        minValue: minGaugeTempValue,
+                                        maxValue: maxGaugeTempValue,
+                                        value: pointerValueTemp,
+                                        thicknessStart: 10,
+                                        thicknessEnd: 0,
+                                        length: 0.6,
+                                        knobRadiusAbsolute: 3,
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Text(pointerValueTemp.toString())
+                            ])
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Stack(alignment: Alignment.bottomCenter, children: [
+                              RadialGauge(
+                                radius:
+                                    MediaQuery.of(context).size.width / 9.33,
+                                axes: [
+                                  RadialGaugeAxis(
+                                    color: Colors.transparent,
+                                    minValue: minGaugeHumValue,
+                                    maxValue: maxGaugeHumValue, minAngle: -90,
+                                    maxAngle: 90,
+                                    // ...
+                                    segments: [
+                                      RadialGaugeSegment(
+                                        minValue: minGaugeHumValue,
+                                        maxValue: minSegmentHumYellowValue,
+                                        minAngle: -90,
+                                        maxAngle: -30,
+                                        color: Colors.green,
+                                      ),
+                                      RadialGaugeSegment(
+                                        minValue: minSegmentHumYellowValue,
+                                        maxValue: minSegmentHumRedValue,
+                                        minAngle: -30,
+                                        maxAngle: 30,
+                                        color: Colors.yellow,
+                                      ),
+                                      RadialGaugeSegment(
+                                        minValue: minSegmentHumRedValue,
+                                        maxValue: maxGaugeHumValue,
+                                        minAngle: 30,
+                                        maxAngle: 90,
+                                        color: Colors.red,
+                                      ),
+                                      // ...
+                                    ],
+                                    pointers: [
+                                      RadialNeedlePointer(
+                                        minValue: minGaugeHumValue,
+                                        maxValue: maxGaugeHumValue,
+                                        value: pointerValueHum,
+                                        thicknessStart: 10,
+                                        thicknessEnd: 0,
+                                        length: 0.6,
+                                        knobRadiusAbsolute: 3,
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Text(pointerValueHum.toString())
+                            ])
+                          ],
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(children: [
+                          Text(
+                            "Soil Moisture",
+                            style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width / 21.33,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          Text(
+                            soil.timestamp == ""
+                                ? ""
+                                : "Last read: " + soil.timestamp + " mins ago",
+                            style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width / 25.33,
+                                fontWeight: FontWeight.w300),
+                          )
+                        ]),
+                        Column(children: [
+                          Text(
+                            "Light",
+                            style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width / 21.33,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          Text(
+                            lux.timestamp == ""
+                                ? ""
+                                : "Last read: " + lux.timestamp + " mins ago",
+                            style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width / 25.33,
+                                fontWeight: FontWeight.w300),
+                          )
+                        ]),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          children: [
+                            Stack(alignment: Alignment.bottomCenter, children: [
+                              RadialGauge(
+                                radius:
+                                    MediaQuery.of(context).size.width / 9.33,
+                                axes: [
+                                  RadialGaugeAxis(
+                                    color: Colors.transparent,
+                                    minValue: minGaugeMoistValue,
+                                    maxValue: maxGaugeMoistValue, minAngle: -90,
+                                    maxAngle: 90,
+                                    // ...
+                                    segments: [
+                                      RadialGaugeSegment(
+                                        minValue: minGaugeMoistValue,
+                                        maxValue: minSegmentMoistYellowValue,
+                                        minAngle: -90,
+                                        maxAngle: -30,
+                                        color: Colors.green,
+                                      ),
+                                      RadialGaugeSegment(
+                                        minValue: minSegmentMoistYellowValue,
+                                        maxValue: minSegmentMoistRedValue,
+                                        minAngle: -30,
+                                        maxAngle: 30,
+                                        color: Colors.yellow,
+                                      ),
+                                      RadialGaugeSegment(
+                                        minValue: minSegmentMoistRedValue,
+                                        maxValue: maxGaugeMoistValue,
+                                        minAngle: 30,
+                                        maxAngle: 90,
+                                        color: Colors.red,
+                                      ),
+                                      // ...
+                                    ],
+                                    pointers: [
+                                      RadialNeedlePointer(
+                                        minValue: minGaugeMoistValue,
+                                        maxValue: maxGaugeMoistValue,
+                                        value: pointerValueSoil,
+                                        thicknessStart: 10,
+                                        thicknessEnd: 0,
+                                        length: 0.6,
+                                        knobRadiusAbsolute: 3,
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Text(pointerValueSoil.toString())
+                            ])
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Stack(alignment: Alignment.bottomCenter, children: [
+                              RadialGauge(
+                                radius:
+                                    MediaQuery.of(context).size.width / 9.33,
+                                axes: [
+                                  RadialGaugeAxis(
+                                    color: Colors.transparent,
+                                    minValue: minGaugeLuxValue,
+                                    maxValue: maxGaugeLuxValue, minAngle: -90,
+                                    maxAngle: 90,
+                                    // ...
+                                    segments: [
+                                      RadialGaugeSegment(
+                                        minValue: minGaugeLuxValue,
+                                        maxValue: minSegmentLuxYellowValue,
+                                        minAngle: -90,
+                                        maxAngle: -30,
+                                        color: Colors.green,
+                                      ),
+                                      RadialGaugeSegment(
+                                        minValue: minSegmentLuxYellowValue,
+                                        maxValue: minSegmentLuxRedValue,
+                                        minAngle: -30,
+                                        maxAngle: 30,
+                                        color: Colors.yellow,
+                                      ),
+                                      RadialGaugeSegment(
+                                        minValue: minSegmentLuxRedValue,
+                                        maxValue: maxGaugeLuxValue,
+                                        minAngle: 30,
+                                        maxAngle: 90,
+                                        color: Colors.red,
+                                      ),
+                                      // ...
+                                    ],
+                                    pointers: [
+                                      RadialNeedlePointer(
+                                        minValue: minGaugeLuxValue,
+                                        maxValue: maxGaugeLuxValue,
+                                        value: pointerValueLux,
+                                        thicknessStart: 10,
+                                        thicknessEnd: 0,
+                                        length: 0.6,
+                                        knobRadiusAbsolute: 3,
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Text(pointerValueLux.toString())
+                            ])
+                          ],
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                            onPressed: () {
+                              if (plant.selected) {
+                                BlocProvider.of<PlantsBloc>(context)
+                                    .add(DeselectPlantEvent(idPlant: plant.id));
+                              } else {
+                                BlocProvider.of<PlantsBloc>(context)
+                                    .add(SelectPlantEvent(idPlant: plant.id));
+                              }
+                            },
+                            style: ButtonStyle(
+                                fixedSize: MaterialStatePropertyAll<Size>(
+                                    Size.fromWidth(320)),
+                                backgroundColor: plant.selected
+                                    ? MaterialStatePropertyAll<Color>(
+                                        Colors.green)
+                                    : MaterialStatePropertyAll<Color>(
+                                        Colors.red)),
+                            child: Text(
+                              plant.selected ? "Disconnect" : "Connect",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize:
+                                      MediaQuery.of(context).size.width / 18.33,
+                                  fontWeight: FontWeight.w500),
+                            ))
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    )
                   ],
                 ),
-                SizedBox(
-                  height: 10,
-                )
-              ],
+              ]),
             ),
           );
         } else {

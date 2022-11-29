@@ -18,46 +18,51 @@ class _PlantDetailsState extends State<PlantDetails> {
         ModalRoute.of(context)?.settings.arguments as List<dynamic>;
     Plant plant = params[0];
     return Scaffold(
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.black),
+          backgroundColor: Colors.grey.shade100,
+        ),
         body: SizedBox(
-      width: MediaQuery.of(context).size.height,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 40),
-            child: CircleAvatar(
-              radius: MediaQuery.of(context).size.height / 8,
-              backgroundImage: NetworkImage(plant.image_url),
-            ),
+          width: MediaQuery.of(context).size.height,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 40),
+                child: CircleAvatar(
+                  radius: MediaQuery.of(context).size.height / 8,
+                  backgroundImage: NetworkImage(plant.image_url),
+                ),
+              ),
+              Text(
+                overflow: TextOverflow.ellipsis,
+                plant.alias,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              Text(plant.display_pid,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300)),
+              Text('category:${plant.category}',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 10)),
+              Container(
+                width: MediaQuery.of(context).size.width / 2,
+                margin: EdgeInsets.symmetric(vertical: 20),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: StadiumBorder(),
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    backgroundColor: Color.fromARGB(255, 29, 119, 32),
+                  ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+                  onPressed: (() {
+                    _displayTextInputDialog(context, _nameController, plant);
+                  }),
+                  child: const Text('Add plant'),
+                ),
+              )
+            ],
           ),
-          Text(
-            overflow: TextOverflow.ellipsis,
-            plant.alias,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          Text(plant.display_pid,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300)),
-          Text('category:${plant.category}',
-              overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 10)),
-          Container(
-            width: MediaQuery.of(context).size.width / 2,
-            margin: EdgeInsets.symmetric(vertical: 20),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: StadiumBorder(),
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                backgroundColor: Color.fromARGB(255, 29, 119, 32),
-              ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
-              onPressed: (() {
-                _displayTextInputDialog(context, _nameController, plant);
-              }),
-              child: const Text('Add plant'),
-            ),
-          )
-        ],
-      ),
-    ));
+        ));
   }
 }
 
