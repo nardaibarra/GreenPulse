@@ -87,13 +87,13 @@ class PlantsBloc extends Bloc<PlantsEvent, PlantsState> {
         .get();
 
     Measure temp = Measure(
-        measure_type: measureTempDoc, plant: "", timestamp: "", value: 0);
+        measure_type: measureTempDoc, plant: plant, timestamp: "", value: 0);
     Measure soil = Measure(
-        measure_type: measureSoilDoc, plant: "", timestamp: "", value: 0);
+        measure_type: measureSoilDoc, plant: plant, timestamp: "", value: 0);
     Measure hum = Measure(
-        measure_type: measureHumDoc, plant: "", timestamp: "", value: 0);
+        measure_type: measureHumDoc, plant: plant, timestamp: "", value: 0);
     Measure lux = Measure(
-        measure_type: measureLightDoc, plant: "", timestamp: "", value: 0);
+        measure_type: measureLightDoc, plant: plant, timestamp: "", value: 0);
 
     if (finalDocPlantTemp.size >= 1 &&
         finalDocPlantLux.size >= 1 &&

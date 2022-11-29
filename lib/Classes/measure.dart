@@ -5,7 +5,7 @@ final finalFormat = new DateFormat('dd/MM/yyyy');
 
 class Measure {
   final DocumentReference<Map<String, dynamic>> measure_type;
-  final String plant;
+  final DocumentReference<Map<String, dynamic>> plant;
   final String timestamp;
   final int value;
 
@@ -23,7 +23,7 @@ class Measure {
 
   static Measure fromJson(Map<String, dynamic> json) => Measure(
       measure_type: json['measure_type'],
-      plant: json['plant'].toString(),
+      plant: json['plant'],
       timestamp: DateTime.now()
           .difference(json['timestamp'].toDate())
           .inMinutes

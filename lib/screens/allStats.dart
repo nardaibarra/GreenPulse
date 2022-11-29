@@ -10,7 +10,7 @@ class statsScreen extends StatefulWidget {
   State<statsScreen> createState() => _statsScreenState();
 }
 
-Stream<List<Measure>> _getStatsFromPlant() {
+Stream<List<Measure>> _getStatsFromPlant(Plant plant) {
   return FirebaseFirestore.instance
       .collection('measure')
       .orderBy('timestamp', descending: true)
@@ -20,30 +20,34 @@ Stream<List<Measure>> _getStatsFromPlant() {
 }
 
 Widget buildMeasures(Measure measure, Plant plant) {
-  print(measure.measure_type);
-  return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: measure.measure_type.id == "soil_moist"
-            ? Colors.brown
-            : measure.measure_type.id == "light"
-                ? Colors.yellow
-                : measure.measure_type.id == "temperature"
-                    ? Colors.red
-                    : Colors.blue,
-      ),
-      title: Text(
-        measure.measure_type.id == "light"
-            ? "Value: " + measure.value.toString() + " Lux"
-            : measure.measure_type.id == "soil_moist"
-                ? "Value: " + measure.value.toString() + "% Mst"
-                : measure.measure_type.id == "humidity"
-                    ? "Value: " + measure.value.toString() + "% Hum"
-                    : measure.measure_type.id == "temperature"
-                        ? "Value: " + measure.value.toString() + "° Celsius"
-                        : "Error",
-        style: TextStyle(fontSize: 21.33, fontWeight: FontWeight.bold),
-      ),
-      subtitle: Text('${measure.timestamp}' + " mins ago"));
+  print(measure.plant.id);
+  if (measure.plant.id == plant.id) {
+    return ListTile(
+        leading: CircleAvatar(
+          backgroundColor: measure.measure_type.id == "soil_moist"
+              ? Colors.brown
+              : measure.measure_type.id == "light"
+                  ? Colors.yellow
+                  : measure.measure_type.id == "temperature"
+                      ? Colors.red
+                      : Colors.blue,
+        ),
+        title: Text(
+          measure.measure_type.id == "light"
+              ? "Value: " + measure.value.toString() + " Lux"
+              : measure.measure_type.id == "soil_moist"
+                  ? "Value: " + measure.value.toString() + "% Mst"
+                  : measure.measure_type.id == "humidity"
+                      ? "Value: " + measure.value.toString() + "% Hum"
+                      : measure.measure_type.id == "temperature"
+                          ? "Value: " + measure.value.toString() + "° Celsius"
+                          : "Error",
+          style: TextStyle(fontSize: 21.33, fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text('${measure.timestamp}' + " mins ago"));
+  } else {
+    return SizedBox();
+  }
 }
 
 class _statsScreenState extends State<statsScreen> {
@@ -63,7 +67,7 @@ class _statsScreenState extends State<statsScreen> {
         ),
       ),
       body: StreamBuilder<List<Measure>>(
-          stream: _getStatsFromPlant(),
+          stream: _getStatsFromPlant(plant),
           builder: ((context, snapshot) {
             if (snapshot.hasError) {
               print(snapshot);

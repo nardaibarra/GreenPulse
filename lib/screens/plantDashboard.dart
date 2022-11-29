@@ -32,13 +32,25 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
     final measureLightDoc =
         FirebaseFirestore.instance.collection('measure_type').doc('light');
     Measure temp = Measure(
-        measure_type: measureTempDoc, plant: "", timestamp: "", value: 1);
+        measure_type: measureTempDoc,
+        plant: measureTempDoc,
+        timestamp: "",
+        value: 1);
     Measure soil = Measure(
-        measure_type: measureSoilDoc, plant: "", timestamp: "", value: 0);
+        measure_type: measureSoilDoc,
+        plant: measureSoilDoc,
+        timestamp: "",
+        value: 0);
     Measure hum = Measure(
-        measure_type: measureHumDoc, plant: "", timestamp: "", value: 0);
+        measure_type: measureHumDoc,
+        plant: measureHumDoc,
+        timestamp: "",
+        value: 0);
     Measure lux = Measure(
-        measure_type: measureLightDoc, plant: "", timestamp: "", value: 0);
+        measure_type: measureLightDoc,
+        plant: measureLightDoc,
+        timestamp: "",
+        value: 0);
     double minGaugeTempValue = 0;
     double maxGaugeTempValue = 100;
     double minSegmentTempYellowValue = maxGaugeTempValue / 3;
@@ -64,7 +76,28 @@ class _favPlantDashboardState extends State<favPlantDashboard> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
+          IconButton(
+              onPressed: () {
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Delete plant'),
+                    content: const Text(
+                        'Are you sure you want to delete this plant? This action can not be undone!'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'Cancel'),
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'OK'),
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              icon: Icon(Icons.delete)),
           IconButton(
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
